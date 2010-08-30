@@ -41,12 +41,18 @@ init() ->
 	{record_name, user},
 	{index, [ibuttons]},
 	{attributes, record_info(fields, user)}]) of
-	    {atomic, ok} -> ok;
+	    {atomic, ok} -> init_user_data();
 	    {aborted, {already_exists, user}} -> ok;
 	    E -> 
 		error_logger:error_msg("Got mnesia error: ~p~n", [E]),
 		error
     end.
+
+% Default debugging data
+init_user_data() ->
+    add_user(#user{username = "user", credits = 100}),
+    add_user(#user{username = "admin", credits = 50, admin = true}),
+    ok.
 
 % User Auth Interfaces
 get_user(username, Username) ->
