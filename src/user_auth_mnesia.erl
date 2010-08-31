@@ -50,6 +50,7 @@ init() ->
 
 % Default debugging data
 init_user_data() ->
+    add_user(#user{username = "user2", credits = 25}),
     add_user(#user{username = "user", credits = 100}),
     add_user(#user{username = "admin", credits = 50, admin = true}),
     ok.
