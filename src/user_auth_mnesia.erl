@@ -108,7 +108,16 @@ add_ibutton(Username, IButton) ->
     end.
 
 del_ibutton(Username, IButton) ->
-    {error, not_implemented}.
+     F = fun() ->
+        case mnesia:read(user, Username) of
+            [User] -> mnesia:write(User#user{ibuttons = User#user.ibuttons -- [IButton]});
+            E -> E
+        end
+    end,
+    case mnesia:transaction(F) of
+        {atomic, ok} -> ok;
+        E -> {error, E}
+    end.
 
 % Debug Methods
 add_user(UserInfo) ->
